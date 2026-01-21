@@ -18,7 +18,7 @@ Before you begin, ensure you have:
 
 ```bash
 # Set your project ID
-export PROJECT_ID="your-gcp-project-id"
+export PROJECT_ID="landingzone cloud build primary"
 gcloud config set project $PROJECT_ID
 
 # Verify project
@@ -61,7 +61,7 @@ Edit `terraform.tfvars` with your configuration:
 
 ```hcl
 # Required
-project_id = "your-gcp-project-id"
+project_id = "landingzone cloud build primary"
 
 # Optional - customize as needed
 region             = "us-central1"

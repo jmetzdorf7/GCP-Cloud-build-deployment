@@ -1,7 +1,7 @@
 # Example terraform.tfvars file
 # Copy this file to terraform.tfvars and fill in your values
 
-project_id      = "your-gcp-project-id"
+project_id      = "landingzone cloud build primary"
 region          = "us-central1"
 service_name    = "my-app"
 repository_name = "GCP-Cloud-build-deployment"

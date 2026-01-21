@@ -34,7 +34,7 @@ The pipeline includes:
 
 ```bash
 # Set your project ID
-export PROJECT_ID="your-gcp-project-id"
+export PROJECT_ID="landingzone cloud build primary"
 gcloud config set project $PROJECT_ID
 
 # Enable required APIs
