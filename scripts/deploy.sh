@@ -66,7 +66,7 @@ cd terraform
 if [ ! -f "terraform.tfvars" ]; then
     print_warn "terraform.tfvars not found. Creating from example..."
     cp terraform.tfvars.example terraform.tfvars
-    sed -i "s/landingzone cloud build primary/$PROJECT_ID/" terraform.tfvars
+    sed -i "s/landingzone-cloud-build-primary/$PROJECT_ID/" terraform.tfvars
     print_info "Created terraform.tfvars. Please review and update as needed."
     print_info "You may want to set alert_email in terraform.tfvars"
 fi
