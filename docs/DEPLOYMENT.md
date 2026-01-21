@@ -67,6 +67,7 @@ project_id = "landingzone-cloud-build-primary"
 region             = "us-central1"
 service_name       = "my-app"
 repository_name    = "GCP-Cloud-build-deployment"
+environment        = "dev"  # Options: dev, uat, prod
 enable_monitoring  = true
 log_retention_days = 30
 
@@ -281,6 +282,9 @@ substitutions:
   _SERVICE_NAME: 'your-service-name'
   _REGION: 'your-preferred-region'
   _MAX_INSTANCES: '10'
+  _MEMORY: '512Mi'
+  _ENVIRONMENT: 'dev'  # Options: dev, uat, prod
+```
   _MEMORY: '512Mi'
 ```
 

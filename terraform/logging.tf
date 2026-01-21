@@ -5,15 +5,15 @@
 resource "google_logging_project_bucket_config" "cloud_build_logs" {
   project        = var.project_id
   location       = "global"
-  bucket_id      = "cloud-build-logs"
+  bucket_id      = "cloud-build-logs-${var.environment}"
   retention_days = var.log_retention_days
-  description    = "Centralized log bucket for Cloud Build CI/CD pipeline"
+  description    = "Centralized log bucket for Cloud Build CI/CD pipeline - ${var.environment} environment"
 }
 
 # Log sink for Cloud Build logs
 resource "google_logging_project_sink" "cloud_build_sink" {
-  name        = "cloud-build-logs-sink"
-  description = "Sink for Cloud Build logs to centralized bucket"
+  name        = "cloud-build-logs-sink-${var.environment}"
+  description = "Sink for Cloud Build logs to centralized bucket - ${var.environment} environment"
   
   destination = "logging.googleapis.com/projects/${var.project_id}/locations/global/buckets/${google_logging_project_bucket_config.cloud_build_logs.bucket_id}"
   
@@ -26,8 +26,8 @@ resource "google_logging_project_sink" "cloud_build_sink" {
 
 # Log sink for Cloud Run logs
 resource "google_logging_project_sink" "cloud_run_sink" {
-  name        = "cloud-run-logs-sink"
-  description = "Sink for Cloud Run application logs"
+  name        = "cloud-run-logs-sink-${var.environment}"
+  description = "Sink for Cloud Run application logs - ${var.environment} environment"
   
   destination = "logging.googleapis.com/projects/${var.project_id}/locations/global/buckets/${google_logging_project_bucket_config.cloud_build_logs.bucket_id}"
   

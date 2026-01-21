@@ -84,6 +84,7 @@ substitutions:
   _SERVICE_ACCOUNT: 'cloud-run-sa@${PROJECT_ID}.iam.gserviceaccount.com'
   _MAX_INSTANCES: '10'
   _MEMORY: '512Mi'
+  _ENVIRONMENT: 'dev'  # Options: dev, uat, prod
   # _WORKER_POOL: 'default-worker-pool'
 
 # Timeout for the entire build
@@ -94,6 +95,7 @@ tags:
   - 'ci-cd'
   - 'secure-pipeline'
   - '${_SERVICE_NAME}'
+  - '${_ENVIRONMENT}'
 
 # Images to be pushed to Container Registry
 images:

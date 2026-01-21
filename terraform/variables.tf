@@ -40,3 +40,14 @@ variable "alert_email" {
   type        = string
   default     = ""
 }
+
+variable "environment" {
+  description = "Environment tag (dev, uat, or prod)"
+  type        = string
+  default     = "dev"
+  
+  validation {
+    condition     = contains(["dev", "uat", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, uat, prod."
+  }
+}

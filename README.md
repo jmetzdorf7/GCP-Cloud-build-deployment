@@ -193,7 +193,25 @@ substitutions:
   _REGION: 'us-central1'            # Deployment region
   _MAX_INSTANCES: '10'              # Max Cloud Run instances
   _MEMORY: '512Mi'                  # Memory per instance
+  _ENVIRONMENT: 'dev'               # Environment tag (dev, uat, prod)
 ```
+
+## Environment Tags
+
+The infrastructure supports environment tagging to separate resources by environment:
+
+- **dev**: Development environment
+- **uat**: User Acceptance Testing environment  
+- **prod**: Production environment
+
+Set the environment in:
+- `terraform.tfvars`: `environment = "dev"` (for infrastructure)
+- `cloudbuild.yaml`: `_ENVIRONMENT: 'dev'` (for build tags)
+
+Each environment creates separate resources with environment-specific naming:
+- Log buckets: `cloud-build-logs-{environment}`
+- Alert policies: Named with environment suffix
+- Service accounts: Display names include environment
 
 ## Directory Structure
 

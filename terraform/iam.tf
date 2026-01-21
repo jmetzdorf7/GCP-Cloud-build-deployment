@@ -4,15 +4,15 @@
 # Service Account for Cloud Build
 resource "google_service_account" "cloud_build_sa" {
   account_id   = "cloud-build-sa"
-  display_name = "Cloud Build Service Account"
-  description  = "Service account for Cloud Build with minimal required permissions"
+  display_name = "Cloud Build Service Account (${var.environment})"
+  description  = "Service account for Cloud Build with minimal required permissions - ${var.environment} environment"
 }
 
 # Service Account for Cloud Run
 resource "google_service_account" "cloud_run_sa" {
   account_id   = "cloud-run-sa"
-  display_name = "Cloud Run Service Account"
-  description  = "Service account for Cloud Run services"
+  display_name = "Cloud Run Service Account (${var.environment})"
+  description  = "Service account for Cloud Run services - ${var.environment} environment"
 }
 
 # IAM Bindings for Cloud Build Service Account

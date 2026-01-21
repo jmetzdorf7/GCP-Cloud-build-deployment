@@ -33,7 +33,7 @@ resource "google_project_service" "cloudrun" {
 # Notification channel for alerts (email)
 resource "google_monitoring_notification_channel" "email" {
   count        = var.alert_email != "" ? 1 : 0
-  display_name = "Email Notification Channel"
+  display_name = "Email Notification Channel - ${var.environment}"
   type         = "email"
   
   labels = {
@@ -41,13 +41,21 @@ resource "google_monitoring_notification_channel" "email" {
   }
   
   enabled = true
+  
+  user_labels = {
+    environment = var.environment
+  }
 }
 
 # Alert policy for build failures
 resource "google_monitoring_alert_policy" "build_failures" {
   count        = var.enable_monitoring ? 1 : 0
-  display_name = "Cloud Build Failure Alert"
+  display_name = "Cloud Build Failure Alert - ${var.environment}"
   combiner     = "OR"
+  
+  user_labels = {
+    environment = var.environment
+  }
   
   conditions {
     display_name = "Build failure rate is high"
@@ -80,8 +88,12 @@ resource "google_monitoring_alert_policy" "build_failures" {
 # Alert policy for Cloud Run service health
 resource "google_monitoring_alert_policy" "cloud_run_errors" {
   count        = var.enable_monitoring ? 1 : 0
-  display_name = "Cloud Run Error Rate Alert"
+  display_name = "Cloud Run Error Rate Alert - ${var.environment}"
   combiner     = "OR"
+  
+  user_labels = {
+    environment = var.environment
+  }
   
   conditions {
     display_name = "Error rate is high"
@@ -115,7 +127,7 @@ resource "google_monitoring_alert_policy" "cloud_run_errors" {
 resource "google_monitoring_dashboard" "cloud_build_dashboard" {
   count          = var.enable_monitoring ? 1 : 0
   dashboard_json = jsonencode({
-    displayName = "Cloud Build CI/CD Pipeline Dashboard"
+    displayName = "Cloud Build CI/CD Pipeline Dashboard - ${var.environment}"
     
     mosaicLayout = {
       columns = 12

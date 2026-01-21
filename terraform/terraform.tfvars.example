@@ -6,6 +6,9 @@ region          = "us-central1"
 service_name    = "my-app"
 repository_name = "GCP-Cloud-build-deployment"
 
+# Environment tag (dev, uat, or prod)
+environment = "dev"
+
 # Enable monitoring and alerting
 enable_monitoring = true
 
