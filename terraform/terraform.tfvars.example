@@ -1,0 +1,16 @@
+# Example terraform.tfvars file
+# Copy this file to terraform.tfvars and fill in your values
+
+project_id      = "your-gcp-project-id"
+region          = "us-central1"
+service_name    = "my-app"
+repository_name = "GCP-Cloud-build-deployment"
+
+# Enable monitoring and alerting
+enable_monitoring = true
+
+# Log retention period in days
+log_retention_days = 30
+
+# Email address for alerts (optional)
+# alert_email = "your-email@example.com"

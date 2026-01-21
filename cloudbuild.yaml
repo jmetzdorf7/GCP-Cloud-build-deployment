@@ -1,0 +1,101 @@
+# Cloud Build configuration for CI/CD pipeline
+# This pipeline demonstrates best practices for secure deployment with IAM roles and logging
+
+steps:
+  # Step 1: Build the application
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+      - '.'
+    waitFor: ['-']
+
+  # Step 2: Run security scanning
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'security-scan'
+    args:
+      - 'beta'
+      - 'container'
+      - 'images'
+      - 'scan'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+    waitFor: ['build']
+
+  # Step 3: Push image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+    waitFor: ['security-scan']
+
+  # Step 4: Push latest tag
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-latest'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+    waitFor: ['push']
+
+  # Step 5: Deploy to Cloud Run (example deployment target)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'deploy'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--service-account'
+      - '${_SERVICE_ACCOUNT}'
+      - '--max-instances'
+      - '${_MAX_INSTANCES}'
+      - '--memory'
+      - '${_MEMORY}'
+    waitFor: ['push-latest']
+
+# Options for the build
+options:
+  # Enable logging to Cloud Logging
+  logging: CLOUD_LOGGING_ONLY
+  
+  # Use higher machine type for faster builds
+  machineType: 'N1_HIGHCPU_8'
+  
+  # Enable log streaming
+  logStreamingOption: 'STREAM_ON'
+  
+  # Set worker pool for private networking (optional)
+  # workerPool: 'projects/$PROJECT_ID/locations/${_REGION}/workerPools/${_WORKER_POOL}'
+
+# Substitutions for customization
+substitutions:
+  _SERVICE_NAME: 'my-app'
+  _REGION: 'us-central1'
+  _SERVICE_ACCOUNT: 'cloud-run-sa@${PROJECT_ID}.iam.gserviceaccount.com'
+  _MAX_INSTANCES: '10'
+  _MEMORY: '512Mi'
+  # _WORKER_POOL: 'default-worker-pool'
+
+# Timeout for the entire build
+timeout: '1800s'
+
+# Tags for organizing builds
+tags:
+  - 'ci-cd'
+  - 'secure-pipeline'
+  - '${_SERVICE_NAME}'
+
+# Images to be pushed to Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
